@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="./css/style.css" />
 
     <!-- Main JS -->
-    <script defer src="./js/script.js"></script>
+    <script defer type="module" src="./js/script.js"></script>
 
     <title>Note App</title>
   </head>
@@ -25,27 +25,73 @@
           <div class="todo_table_header__item">Dates</div>
           <div class="todo_table_header__item">icons</div>
         </div>
-        <div class="todo_table_row">
-          <div class="todo_table_row__item">Name</div>
-          <div class="todo_table_row__item">Created</div>
-          <div class="todo_table_row__item">Category</div>
-          <div class="todo_table_row__item">Content</div>
-          <div class="todo_table_row__item">Dates</div>
-          <div class="todo_table_row__item">icons</div>
+        <div class="todo_table_row__wraper">
+          <!--    <div class="todo_table_row">
+            <div class="todo_table_row__item">Name</div>
+            <div class="todo_table_row__item">Created</div>
+            <div class="todo_table_row__item">Category</div>
+            <div class="todo_table_row__item">Content</div>
+            <div class="todo_table_row__item">Dates</div>
+            <div class="todo_table_row__item">
+              <img
+                src="/icons/edit.png"
+                alt="edit_icon"
+                class="edit_icon"
+              /><img
+                src="/icons/archive.png"
+                alt="archive_icon"
+                class="archive_icon"
+              /><img
+                src="/icons/trash.png"
+                alt="trash_icon"
+                class="trash_icon"
+              />
+            </div>
+          </div> -->
         </div>
+      </div>
+      <div class="button_wraper">
+        <button class="add_task__button">Create Note</button>
       </div>
       <div class="pivot_table">
         <div class="pivot_table_header">
-          <div class="pivot_table_header__item">Name</div>
-          <div class="pivot_table_header__item">Created</div>
-          <div class="pivot_table_header__item">Category</div>
+          <div class="pivot_table_header__item">Notes by categories</div>
+          <div class="pivot_table_header__item">Active</div>
+          <div class="pivot_table_header__item">Archived</div>
         </div>
-        <div class="pivot_table_row">
+        <!-- <div class="pivot_table_row">
           <div class="pivot_table_row__item">Name</div>
           <div class="pivot_table_row__item">Created</div>
           <div class="pivot_table_row__item">Category</div>
-        </div>
+        </div> -->
       </div>
     </main>
+
+    <div class="modal_wrapper">
+      <div class="modal_content">
+        <div class="name_input">
+          <input type="text" placeholder="Add a name" />
+        </div>
+        <div class="category_input">
+          <label for="category_select">Select a category:</label>
+          <select name="category_select" id="category_select">
+            <option value="Task">Task</option>
+            <option value="Random thought">Random Thought</option>
+            <option value="Idea">Idea</option>
+          </select>
+        </div>
+        <div class="content_input">
+          <input type="text" placeholder="Add a note content" />
+        </div>
+        <div class="dates_input">
+          <input type="text" placeholder="Add a dates" />
+        </div>
+
+        <div class="submit">
+          <button class="add_btn">Add Note</button>
+        </div>
+      </div>
+      <div class="modal_overlay"></div>
+    </div>
   </body>
 </html>
