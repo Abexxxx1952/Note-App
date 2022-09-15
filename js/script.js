@@ -1,5 +1,5 @@
 const category = ["Task", "Random thought", "Idea"];
-const regexp = /todo_table/gi;
+
 let tableFlag = "activeTask";
 const activeTask = [
   {
@@ -162,7 +162,14 @@ function InitPivotTable() {
   });
 }
 
-function CreateNodeModal(name, category, content, dates) {
+function transformDates(dates) {
+  const regexp = /\d{1,2}\.\d{1,2}.\d{2,4}/g;
+
+  return dates.match(regexp).join(", ");
+}
+
+function CreateNoteModal(name, category, content, datesprops) {
+  const dates = transformDates(datesprops);
   activeTask.push({
     name,
     creation_time: new Date().toLocaleDateString("en-US", {
@@ -176,7 +183,15 @@ function CreateNodeModal(name, category, content, dates) {
   });
 }
 
-function EditNodeModal(idx, name, creation_time, category, content, dates) {
+function EditNoteModal(
+  idx,
+  name,
+  creation_time,
+  category,
+  content,
+  datesprops
+) {
+  const dates = transformDates(datesprops);
   activeTask.splice(idx, 1, {
     name,
     creation_time,
@@ -325,7 +340,7 @@ function Modal(
   switch (action) {
     case "createNote":
       addButton.addEventListener("click", () => {
-        CreateNodeModal(
+        CreateNoteModal(
           nameInput.value,
           categoryInputSelect.value,
           contentInput.value,
@@ -333,13 +348,16 @@ function Modal(
         );
 
         CleanInputValue();
-        InitTodoTable();
+        if (tableFlag === "activeTask") {
+          InitTodoTable();
+        }
+        InitPivotTable();
         modalOverlay.click();
       });
       break;
     case "editNote":
       addButton.addEventListener("click", () => {
-        EditNodeModal(
+        EditNoteModal(
           idx,
           nameInput.value,
           creation_time,
@@ -349,7 +367,9 @@ function Modal(
         );
 
         CleanInputValue();
-        InitTodoTable();
+        if (tableFlag === "activeTask") {
+          InitTodoTable();
+        }
         InitPivotTable();
         modalOverlay.click();
       });
