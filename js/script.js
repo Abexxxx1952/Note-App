@@ -4,7 +4,7 @@ const activeTask = [
   {
     name: "Play associations",
     creation_time: "September 14, 2022",
-    category: "idea",
+    category: "Idea",
     content: "Play the association game",
     dates: "06.13.24, 06.12.24",
   },
@@ -86,16 +86,20 @@ function InitArchiveTable() {}
 function InitPivotTable() {
   pivotTable.innerHTML = "";
 
-  [...activeTask, ...archivedTask].forEach((elem, idx) => {});
-
   category.forEach((elem, idx) => {
-    const activeTaskValue = activeTask.filter((elem) => elem.category === elem);
+    const activeTaskValue = activeTask.filter(
+      (filterElem) => filterElem.category === elem
+    ).length;
+    console.log(elem);
+    const archivedTaskValue = archivedTask.filter(
+      (filterElem) => filterElem.category === elem
+    ).length;
     const newElement = document.createElement("div");
     newElement.classList.add("pivot_table_row");
     newElement.innerHTML = `
           <div class="pivot_table_row__item">${elem}</div>
-          <div class="pivot_table_row__item">Created</div>
-          <div class="pivot_table_row__item">Category</div>
+          <div class="pivot_table_row__item">${activeTaskValue}</div>
+          <div class="pivot_table_row__item">${archivedTaskValue}</div>
         `;
 
     pivotTable.appendChild(newElement);
@@ -131,6 +135,7 @@ function DeleteNode(arr, idx) {
   if ((arr = "todo_table_row__item")) {
     activeTask.splice(idx, 1);
     InitTodoTable();
+    InitPivotTable();
     return;
   }
 
@@ -143,6 +148,7 @@ function ArchiveNode(idx) {
   activeTask.splice(idx, 1);
   archivedTask.push(archivedNote);
   InitTodoTable();
+  InitPivotTable();
 }
 
 function DeArchiveNode(idx) {
@@ -150,6 +156,7 @@ function DeArchiveNode(idx) {
   archivedTask.splice(idx, 1);
   activeTask.push(archivedNote);
   InitArchiveTable();
+  InitPivotTable();
 }
 
 function EditNode(arr, idx) {
@@ -252,9 +259,6 @@ function Modal(
   mainWraper.style.display = "none";
   modalWraper.style.display = "flex";
 
-  /*   categoryInput.firstElementChild.value = inputCategory;
-
-  console.log(categoryInput); */
   modalOverlay.style.display = "flex";
 
   modalOverlay.addEventListener("click", () => {
@@ -291,6 +295,7 @@ function Modal(
 
         CleanInputValue();
         InitTodoTable();
+        InitPivotTable();
         modalOverlay.click();
       });
       break;
@@ -301,6 +306,7 @@ function Modal(
 }
 
 InitTodoTable();
+InitPivotTable();
 
 createNoteButton.addEventListener("click", () => {
   Modal("createNote");
