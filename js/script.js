@@ -1,5 +1,6 @@
 const category = ["Task", "Random thought", "Idea"];
 const regexp = /todo_table/gi;
+let tableFlag = "activeTask";
 const activeTask = [
   {
     name: "Play associations",
@@ -56,14 +57,50 @@ const archivedTask = [];
 const body = document.querySelector("body");
 const createNoteButton = document.querySelector(".add_task__button");
 const mainWraper = document.querySelector(".wrapper");
-
+const todoTable = document.querySelector(".todo_table");
+const archivedTable = document.querySelector(".archived_table");
 const modalWraper = document.querySelector(".modal_wrapper");
 
-const todoTable = document.querySelector(".todo_table_row__wraper");
+const todoTableWraper = document.querySelector(".todo_table_row__wraper");
+const archivedTableWraper = document.querySelector(
+  ".archived_table_row__wraper"
+);
 const pivotTable = document.querySelector(".pivot_table_row__wraper");
+const switchButtonWraper = document.querySelector(".switch_button_wraper");
+
+function CreateSwitchButton() {
+  switchButtonWraper.innerHTML = "";
+
+  const buttonContent =
+    tableFlag === "activeTask" ? "Watch archived notes" : "Watch active notes";
+
+  const switchButton = document.createElement("button");
+  switchButton.classList.add("switch_button");
+  switchButton.textContent = buttonContent;
+  console.log(switchButton);
+
+  switchButtonWraper.appendChild(switchButton);
+  document.querySelector(".switch_button").addEventListener("click", () => {
+    FlagSwitch();
+    CreateSwitchButton();
+    if (tableFlag === "activeTask") {
+      InitTodoTable();
+    }
+    if (tableFlag === "archivedTask") {
+      InitArchiveTable();
+    }
+  });
+}
+
+function FlagSwitch() {
+  tableFlag = tableFlag === "activeTask" ? "archivedTask" : "activeTask";
+  console.log(tableFlag);
+}
 
 function InitTodoTable() {
-  todoTable.innerHTML = "";
+  todoTable.style.display = "";
+  archivedTable.style.display = "none";
+  todoTableWraper.innerHTML = "";
   activeTask.forEach((elem, idx) => {
     const newElement = document.createElement("div");
     newElement.classList.add("todo_table_row");
@@ -77,11 +114,30 @@ function InitTodoTable() {
         </div>
         `;
 
-    todoTable.appendChild(newElement);
+    todoTableWraper.appendChild(newElement);
   });
 }
 
-function InitArchiveTable() {}
+function InitArchiveTable() {
+  todoTable.style.display = "none";
+  archivedTable.style.display = "";
+  archivedTableWraper.innerHTML = "";
+  archivedTask.forEach((elem, idx) => {
+    const newElement = document.createElement("div");
+    newElement.classList.add("archived_table_row");
+    newElement.innerHTML = `
+          <div class="archived_table_row__item">${elem.name}</div>
+          <div class="archived_table_row__item">${elem.creation_time}</div>
+          <div class="archived_table_row__item">${elem.category}</div>
+          <div class="archived_table_row__item">${elem.content}</div>
+          <div class="archived_table_row__item">${elem.dates}</div>
+          <div class="archived_table_row__item" ><div class="icons_wraper" data-index=${idx}><img src="./icons/unzip.png" alt="archive_icon" class="archive_icon"><img src="./icons/trash.png" alt="trash_icon" class="trash_icon"></div>
+        </div>
+        `;
+
+    archivedTableWraper.appendChild(newElement);
+  });
+}
 
 function InitPivotTable() {
   pivotTable.innerHTML = "";
@@ -90,7 +146,7 @@ function InitPivotTable() {
     const activeTaskValue = activeTask.filter(
       (filterElem) => filterElem.category === elem
     ).length;
-    console.log(elem);
+
     const archivedTaskValue = archivedTask.filter(
       (filterElem) => filterElem.category === elem
     ).length;
@@ -131,8 +187,7 @@ function EditNodeModal(idx, name, creation_time, category, content, dates) {
 }
 
 function DeleteNode(arr, idx) {
-  console.log(arr);
-  if ((arr = "todo_table_row__item")) {
+  if (arr === "todo_table_row__item") {
     activeTask.splice(idx, 1);
     InitTodoTable();
     InitPivotTable();
@@ -151,7 +206,7 @@ function ArchiveNode(idx) {
   InitPivotTable();
 }
 
-function DeArchiveNode(idx) {
+function unZipNode(idx) {
   const archivedNote = archivedTask[idx];
   archivedTask.splice(idx, 1);
   activeTask.push(archivedNote);
@@ -307,12 +362,13 @@ function Modal(
 
 InitTodoTable();
 InitPivotTable();
+CreateSwitchButton();
 
 createNoteButton.addEventListener("click", () => {
   Modal("createNote");
 });
 
-todoTable.addEventListener("click", (e) => {
+todoTableWraper.addEventListener("click", (e) => {
   if (e.target.alt === "trash_icon") {
     DeleteNode(
       e.target.parentNode.parentNode.className,
@@ -328,5 +384,18 @@ todoTable.addEventListener("click", (e) => {
       e.target.parentNode.parentNode.className,
       e.target.parentNode.dataset.index
     );
+  }
+});
+
+archivedTableWraper.addEventListener("click", (e) => {
+  if (e.target.alt === "trash_icon") {
+    DeleteNode(
+      e.target.parentNode.parentNode.className,
+      e.target.parentNode.dataset.index
+    );
+  }
+
+  if (e.target.alt === "archive_icon") {
+    unZipNode(e.target.parentNode.dataset.index);
   }
 });
