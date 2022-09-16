@@ -260,3 +260,7 @@ input:invalid ~ div > p {
 input:invalid ~ div {
   height: 0px;
 }
+
+input:invalid ~ div {
+  height: 0px;
+}
