@@ -53,4 +53,4 @@ export const activeTask = [
 ];
 export const archivedTask = [];
 
-export const regexp = /\d{1,2}\.\d{1,2}.\d{2,4}/g;
+export const regexp = /\d{1,2}\/\d{1,2}\/\d{2,4}/g;

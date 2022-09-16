@@ -5,18 +5,18 @@ export let tableFlag = "activeTask";
 
 const todoTable = document.querySelector(".todo_table");
 const archivedTable = document.querySelector(".archived_table");
-const pivotTable = document.querySelector(".pivot_table_row__wraper");
-const todoTableWraper = document.querySelector(".todo_table_row__wraper");
-const archivedTableWraper = document.querySelector(
-  ".archived_table_row__wraper"
+const pivotTable = document.querySelector(".pivot_table_row__wrapper");
+const todoTableWrapper = document.querySelector(".todo_table_row__wrapper");
+const archivedTableWrapper = document.querySelector(
+  ".archived_table_row__wrapper"
 );
 
 const createNoteButton = document.querySelector(".add_task__button");
 
-const switchButtonWraper = document.querySelector(".switch_button_wraper");
+const switchButtonWrapper = document.querySelector(".switch_button_wrapper");
 
 function CreateSwitchButton() {
-  switchButtonWraper.innerHTML = "";
+  switchButtonWrapper.innerHTML = "";
 
   const buttonContent =
     tableFlag === "activeTask" ? "Watch archived notes" : "Watch active notes";
@@ -25,7 +25,7 @@ function CreateSwitchButton() {
   switchButton.classList.add("switch_button");
   switchButton.textContent = buttonContent;
 
-  switchButtonWraper.appendChild(switchButton);
+  switchButtonWrapper.appendChild(switchButton);
   document.querySelector(".switch_button").addEventListener("click", () => {
     FlagSwitch();
     CreateSwitchButton();
@@ -45,7 +45,7 @@ function FlagSwitch() {
 export function InitTodoTable() {
   todoTable.style.display = "";
   archivedTable.style.display = "none";
-  todoTableWraper.innerHTML = "";
+  todoTableWrapper.innerHTML = "";
   activeTask.forEach((elem, idx) => {
     const newElement = document.createElement("div");
     newElement.classList.add("todo_table_row");
@@ -55,18 +55,18 @@ export function InitTodoTable() {
           <div class="todo_table_row__item">${elem.category}</div>
           <div class="todo_table_row__item">${elem.content}</div>
           <div class="todo_table_row__item">${elem.dates}</div>
-          <div class="todo_table_row__item" ><div class="icons_wraper" data-index=${idx}><img src="./icons/edit.png" alt="edit_icon" class="edit_icon"><img src="./icons/archive.png" alt="archive_icon" class="archive_icon"><img src="./icons/trash.png" alt="trash_icon" class="trash_icon"></div>
+          <div class="todo_table_row__item" ><div class="icons_wrapper" data-index=${idx}><img src="./icons/edit.png" alt="edit_icon" class="edit_icon"><img src="./icons/archive.png" alt="archive_icon" class="archive_icon"><img src="./icons/trash.png" alt="trash_icon" class="trash_icon"></div>
         </div>
         `;
 
-    todoTableWraper.appendChild(newElement);
+    todoTableWrapper.appendChild(newElement);
   });
 }
 
 function InitArchiveTable() {
   todoTable.style.display = "none";
   archivedTable.style.display = "";
-  archivedTableWraper.innerHTML = "";
+  archivedTableWrapper.innerHTML = "";
   archivedTask.forEach((elem, idx) => {
     const newElement = document.createElement("div");
     newElement.classList.add("archived_table_row");
@@ -76,11 +76,11 @@ function InitArchiveTable() {
           <div class="archived_table_row__item">${elem.category}</div>
           <div class="archived_table_row__item">${elem.content}</div>
           <div class="archived_table_row__item">${elem.dates}</div>
-          <div class="archived_table_row__item" ><div class="icons_wraper" data-index=${idx}><img src="./icons/unzip.png" alt="archive_icon" class="archive_icon"><img src="./icons/trash.png" alt="trash_icon" class="trash_icon"></div>
+          <div class="archived_table_row__item" ><div class="icons_wrapper" data-index=${idx}><img src="./icons/unzip.png" alt="archive_icon" class="archive_icon"><img src="./icons/trash.png" alt="trash_icon" class="trash_icon"></div>
         </div>
         `;
 
-    archivedTableWraper.appendChild(newElement);
+    archivedTableWrapper.appendChild(newElement);
   });
 }
 
@@ -156,7 +156,7 @@ createNoteButton.addEventListener("click", () => {
   Modal("createNote");
 });
 
-todoTableWraper.addEventListener("click", (e) => {
+todoTableWrapper.addEventListener("click", (e) => {
   if (e.target.alt === "trash_icon") {
     DeleteNode(
       e.target.parentNode.parentNode.className,
@@ -175,7 +175,7 @@ todoTableWraper.addEventListener("click", (e) => {
   }
 });
 
-archivedTableWraper.addEventListener("click", (e) => {
+archivedTableWrapper.addEventListener("click", (e) => {
   if (e.target.alt === "trash_icon") {
     DeleteNode(
       e.target.parentNode.parentNode.className,

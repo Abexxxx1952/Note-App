@@ -170,13 +170,13 @@ body {
   justify-content: center;
   align-items: center;
 }
-.create_button_wraper {
+.create_button_wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
   margin-right: 2em;
 }
-.switch_button_wraper {
+.switch_button_wrapper {
   display: flex;
   flex-direction: column;
   align-items: flex-end;
@@ -214,7 +214,7 @@ body {
   align-items: center;
 }
 input {
-  margin: 10px;
+  margin: 15px;
   width: 250px;
   height: 50px;
   border-radius: 5px;
@@ -238,7 +238,25 @@ input {
   justify-content: center;
   align-items: center;
 }
-.icons_wraper {
+.icons_wrapper {
   display: flex;
   gap: 10px;
+}
+
+input ~ div > p {
+  display: none;
+}
+
+input:invalid ~ div > p {
+  position: relative;
+  top: -12px;
+  right: 5px;
+  display: block;
+  text-align: right;
+  padding-right: 10px;
+  font-size: 12px;
+  color: rgba(134, 54, 54, 0.774);
+}
+input:invalid ~ div {
+  height: 0px;
 }

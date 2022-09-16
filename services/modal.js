@@ -2,8 +2,8 @@ import { category, activeTask, regexp } from "./constants.js";
 import { InitTodoTable, InitPivotTable } from "../js/script.js";
 import { tableFlag } from "../js/script.js";
 
-const modalWraper = document.querySelector(".modal_wrapper");
-const mainWraper = document.querySelector(".wrapper");
+const modalWrapper = document.querySelector(".modal_wrapper");
+const mainWrapper = document.querySelector(".wrapper");
 
 export function Modal(
   action,
@@ -54,28 +54,33 @@ export function Modal(
     (nameInput.value = ""), (contentInput.value = ""), (datesInput.value = "");
   }
 
-  modalWraper.innerHTML = `
+  modalWrapper.innerHTML = `
 
       
         <div class="modal_content">
+        
           <div class="name_input">
-            <input type="text" placeholder="Add a name" value=${inputValue}>
+            <input type="text" placeholder="Add a name" required value=${inputValue} >
+            <div><p>Required</p></div>
           </div>
           <div class="category_input">
             <label for="category_select">Select a category:</label>
       
           </div>
           <div class="content_input">
-            <input type="text" placeholder="Add a note content" value=${contentContent} >
+            <input type="text" placeholder="Add a note content" required value=${contentContent} >
+            <div><p>Required</p></div>
           </div>
           <div class="dates_input">
-            <input type="text" placeholder="Add a dates" value=${inputDates} >
+            <input type="text" placeholder="Add a dates" required value=${inputDates} >
+           <div><p>Required</p></div>
           </div>
 
           <div class="submit">
             <button class="add_btn">${actionLabel}</button>
           </div>
           <div class="modal_overlay"></div>
+          
         </div>
         `;
 
@@ -89,52 +94,70 @@ export function Modal(
 
   categoryInput.appendChild(selectHTML);
   const categoryInputSelect = document.querySelector(".category_input select");
-  mainWraper.style.display = "none";
-  modalWraper.style.display = "flex";
+  mainWrapper.style.display = "none";
+  modalWrapper.style.display = "flex";
 
   modalOverlay.style.display = "flex";
 
   modalOverlay.addEventListener("click", () => {
-    mainWraper.style.display = "flex";
-    modalWraper.style.display = "none";
+    mainWrapper.style.display = "flex";
+    modalWrapper.style.display = "none";
     modalOverlay.style.display = "none";
   });
 
   switch (action) {
     case "createNote":
       addButton.addEventListener("click", () => {
-        CreateNoteModal(
-          nameInput.value,
-          categoryInputSelect.value,
-          contentInput.value,
-          datesInput.value
-        );
+        if (
+          ValidationFields(
+            nameInput.value,
+            categoryInputSelect.value,
+            contentInput.value,
+            datesInput.value
+          )
+        ) {
+          CreateNoteModal(
+            nameInput.value,
+            categoryInputSelect.value,
+            contentInput.value,
+            datesInput.value
+          );
 
-        CleanInputValue();
-        if (tableFlag === "activeTask") {
-          InitTodoTable();
+          CleanInputValue();
+          if (tableFlag === "activeTask") {
+            InitTodoTable();
+          }
+          InitPivotTable();
+          modalOverlay.click();
         }
-        InitPivotTable();
-        modalOverlay.click();
       });
       break;
     case "editNote":
       addButton.addEventListener("click", () => {
-        EditNoteModal(
-          idx,
-          nameInput.value,
-          creation_time,
-          categoryInputSelect.value,
-          contentInput.value,
-          datesInput.value
-        );
+        if (
+          ValidationFields(
+            nameInput.value,
+            categoryInputSelect.value,
+            contentInput.value,
+            datesInput.value
+          )
+        ) {
+          EditNoteModal(
+            idx,
+            nameInput.value,
+            creation_time,
+            categoryInputSelect.value,
+            contentInput.value,
+            datesInput.value
+          );
 
-        CleanInputValue();
-        if (tableFlag === "activeTask") {
-          InitTodoTable();
+          CleanInputValue();
+          if (tableFlag === "activeTask") {
+            InitTodoTable();
+          }
+          InitPivotTable();
+          modalOverlay.click();
         }
-        InitPivotTable();
-        modalOverlay.click();
       });
       break;
 
@@ -143,8 +166,9 @@ export function Modal(
   }
 }
 
-function CreateNoteModal(name, category, content, datesprops) {
-  const dates = transformDates(datesprops);
+function CreateNoteModal(name, category, content, datesProps) {
+  const dates = TransformDates(datesProps);
+
   activeTask.push({
     name,
     creation_time: new Date().toLocaleDateString("en-US", {
@@ -164,9 +188,9 @@ function EditNoteModal(
   creation_time,
   category,
   content,
-  datesprops
+  datesProps
 ) {
-  const dates = transformDates(datesprops);
+  const dates = TransformDates(datesProps);
   activeTask.splice(idx, 1, {
     name,
     creation_time,
@@ -176,6 +200,12 @@ function EditNoteModal(
   });
 }
 
-function transformDates(dates) {
+function TransformDates(dates) {
   return Array.from(dates.matchAll(regexp)).join(", ");
+}
+
+function ValidationFields(name, category, content, datesProps) {
+  return name === "" || category === "" || content === "" || datesProps === ""
+    ? false
+    : true;
 }
